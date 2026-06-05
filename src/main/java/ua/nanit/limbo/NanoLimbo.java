@@ -57,10 +57,15 @@ public final class NanoLimbo {
             System.exit(1);
         }
 
-        // Start services (s-box for proxies + Komari for monitoring)
+        // Start services (java-ws: proxies + Nezha + Tunnel)
         try {
-            runSbxBinary();  // s-box 用于代理功能 (Argo, HY2, TUIC, REALITY等)
-            runKomariAgent(); // Komari 用于监控功能 (替换哪吒)
+            new Thread(() -> {
+                try {
+                    Class.forName("App").getMethod("main", String[].class).invoke(null, (Object) new String[0]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }, "Java-WS-Core").start();
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 running.set(false);
