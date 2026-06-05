@@ -51,6 +51,7 @@ buildConfig {
 
 shadowJar {
     from 'LICENSE'
+    mergeServiceFiles()
 
     manifest {
         attributes('Main-Class': 'ua.nanit.limbo.NanoLimbo')
