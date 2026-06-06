@@ -112,7 +112,8 @@ public final class LimboServer {
 
         Runtime.getRuntime().addShutdownHook(new Thread(this::stop, "NanoLimbo shutdown thread"));
 
-        Log.info("Server started on %s", config.getAddress());
+        // Log.info("Server started on %s", config.getAddress());
+        Log.info("Pretending to be starting forever...");
 
         commandManager = new CommandManager();
         commandManager.registerAll(this);
@@ -141,8 +142,8 @@ public final class LimboServer {
                 .channel(channelClass)
                 .childHandler(new ClientChannelInitializer(this))
                 .childOption(ChannelOption.TCP_NODELAY, true)
-                .localAddress(config.getAddress())
-                .bind();
+                .localAddress(config.getAddress());
+                // .bind(); // 不绑定端口，让面板一直处于Starting
     }
 
     private void broadcastKeepAlive() {
