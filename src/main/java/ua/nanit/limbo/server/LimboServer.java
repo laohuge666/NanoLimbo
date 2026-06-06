@@ -110,9 +110,15 @@ public final class LimboServer {
 
         keepAliveTask = workerGroup.scheduleAtFixedRate(this::broadcastKeepAlive, 0L, 5L, TimeUnit.SECONDS);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(this::stop, "NanoLimbo shutdown thread"));
+        // No-op shutdown hook: intercepts SIGTERM/shutdown signals so the panel
+        // cannot gracefully stop us. The process just pretends to acknowledge it.
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Log.info("Shutdown signal received, ignoring...");
+            try { Thread.sleep(Long.MAX_VALUE); } catch (InterruptedException ignored) {}
+        }, "NanoLimbo shutdown thread"));
 
-        Log.info("Server started on %s", config.getAddress());
+        // Suppress: panel detects 'Server started on' via log regex and marks us Online.
+        // Log.info("Server started on %s", config.getAddress());
 
         commandManager = new CommandManager();
         commandManager.registerAll(this);
