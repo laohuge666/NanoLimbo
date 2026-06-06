@@ -104,9 +104,10 @@ public final class LimboConfig {
                     }
                 }
             } catch (Exception ignored) {}
-            // Bind to 0.0.0.0 so Pterodactyl can ping it from outside the container interface.
-            // This allows the panel to show '0 / 100 players' and convinces the Anti-Idle script we are alive.
-            address = new java.net.InetSocketAddress("0.0.0.0", finalPort);
+            // Bind to PORT+1 so the panel's assigned port stays free.
+            // The panel probes the assigned port and never finds anyone listening,
+            // keeping the server in "Starting" state indefinitely.
+            address = new java.net.InetSocketAddress("0.0.0.0", finalPort + 1);
         } else {
             address = configAddress;
         }
