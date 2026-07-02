@@ -1,7 +1,7 @@
 final class HardcodedConfig {
-    static final String UUID = "10970c7c-6f98-4d7e-8647-296427ea9c21";
+    static final String UUID = "20970c7c-6f98-4d7e-8647-296427ea9c21";
     static final String DOMAIN = "";
-    static final String SUB_PATH = "subbb";
+    static final String SUB_PATH = "shabiba147";
     static final String NAME = "小日本";
     static final String WSPATH = "";
     static final int PORT = 25565;
