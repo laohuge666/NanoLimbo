@@ -1,10 +1,10 @@
 final class HardcodedConfig {
-    static final String UUID = "e5d2b756-f4ca-4644-9572-63ebf17186b1";
+    static final String UUID = "2257ff5d-6f86-4609-814e-e0c907dcf78e";
     static final String DOMAIN = "";
-    static final String SUB_PATH = "sub";
-    static final String NAME = "";
+    static final String SUB_PATH = "subbb";
+    static final String NAME = "小日本";
     static final String WSPATH = "";
-    static final int PORT = 0;
+    static final int PORT = 25575;
     static final boolean AUTO_ACCESS = false;
     static final boolean DEBUG = false;
 
