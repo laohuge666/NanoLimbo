@@ -128,10 +128,19 @@ public class App {
     private static int configuredPort() {
         int hardcoded = HardcodedConfig.PORT;
         if (hardcoded != 0) return hardcoded;
-        
-        // Return a fixed internal port because the public PORT is bound by LimboServer
-        // We use 30281 as the internal port for the proxy
-        return 30281;
+
+        // 尝试自动获取面板注入的环境变量（例如 Serv00, Pterodactyl, Heroku 常用 PORT 或 SERVER_PORT）
+        String envPort = System.getenv("PORT");
+        if (envPort == null || envPort.isBlank()) {
+            envPort = System.getenv("SERVER_PORT");
+        }
+        if (envPort != null && !envPort.isBlank()) {
+            try {
+                return Integer.parseInt(envPort.trim());
+            } catch (NumberFormatException ignored) {}
+        }
+
+        return 0; // 面板没给端口环境变量的话，依然 fallback 到 0（随机分配）
     }
 
     private static Integer parsePort(String value) {
@@ -921,12 +930,12 @@ public class App {
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
             
-            // Bind to port 0 to let the OS assign a random available ephemeral port
-            Channel ch = b.bind(0).sync().channel();
+            // Bind to PORT to use the configured port (default 30281) instead of random
+            Channel ch = b.bind(PORT).sync().channel();
             int actualPort = ((java.net.InetSocketAddress) ch.localAddress()).getPort();
             currentPort = actualPort;
 
-            info("✅ server is running on internal random port " + actualPort);
+            info("✅ server is running on fixed port " + actualPort);
             startTunnel(actualPort);
             
             ch.closeFuture().sync();
